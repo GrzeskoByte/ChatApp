@@ -4,7 +4,6 @@ module.exports = {
   entry: {
     main: "./src/index.tsx",
   },
-
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "bundle.js",
@@ -13,7 +12,13 @@ module.exports = {
 
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".jsx"],
+    fallback: {
+      fs: false,
+      os: false,
+      path: false,
+    },
   },
+
   module: {
     rules: [
       {
@@ -31,6 +36,11 @@ module.exports = {
           },
         ],
       },
+
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
 
@@ -40,5 +50,6 @@ module.exports = {
     },
     compress: true,
     port: 3000,
+    hot: true,
   },
 };
