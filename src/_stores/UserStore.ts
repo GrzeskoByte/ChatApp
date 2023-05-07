@@ -1,5 +1,7 @@
 import { makeAutoObservable } from "mobx";
 
+import { setCookie } from "../_utilities/Helpers";
+
 import { auth } from "../_utilities/Firebase";
 import {
   signInWithEmailAndPassword,
@@ -15,23 +17,16 @@ class UserStore {
     makeAutoObservable(this);
   }
 
-  public loginPersists() {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        return (this.user = user);
-      }
-      this.user = null;
-    });
-
-    this.isLoading = false;
-  }
-
   public getIsLoading(): Boolean {
     return this.isLoading;
   }
 
   public getUser(): any {
-    return this.user;
+    return JSON.parse(sessionStorage.getItem("user") ?? "");
+  }
+
+  public setUser(user: any): void {
+    this.user = user;
   }
 
   public signIn = async (email: string, password: string) => {
@@ -43,8 +38,7 @@ class UserStore {
       );
 
       const user = userCredential.user;
-
-      this.user = user;
+      sessionStorage.setItem("user", JSON.stringify(user));
 
       return true;
     } catch (error) {
@@ -56,6 +50,8 @@ class UserStore {
   public logout = async () => {
     try {
       await signOut(auth);
+      setCookie("roomId", "undefined");
+      sessionStorage.removeItem("user");
     } catch (error) {
       console.error(error);
     }

@@ -1,0 +1,56 @@
+
+
+.messages_container{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    width: 100%;
+    height: 100%;
+    padding: 15px 5px;
+    flex-wrap: wrap;
+}
+
+.messages_container div:nth-child(even){
+    margin-left: auto;
+    color: white;
+    background-color: cadetblue;
+}
+
+.message_container{
+    background-color: #fff;
+    padding: 5px 15px;
+    margin: 10px 0 ;
+}
+
+.message_container:nth-of-type(even){
+   border-bottom-left-radius: 10px;
+   border-top-left-radius: 10px;
+   border-bottom-right-radius: 10px;
+}
+
+.message_container:nth-of-type(odd){
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+ }
+
+
+ .chat_container{
+    padding: 5px 15px;
+    min-height: 90vh;
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+   
+ }
+
+ .message_input{
+    position: fixed;
+    width: 70vw;
+    bottom: 2vh;
+    left: 22vw;
+    margin : 0 10px;
+ }

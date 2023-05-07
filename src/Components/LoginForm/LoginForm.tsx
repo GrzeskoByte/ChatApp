@@ -28,6 +28,8 @@ const LoginForm: React.FC = () => {
     console.log("Failed:", errorInfo);
   };
 
+React.useEffect(() => {}, []);
+
   return (
     <Space direction="vertical" className="loginForm_container">
       {contextHolder}

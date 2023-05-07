@@ -13,17 +13,21 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
+    "@types/js-cookie": "^3.0.3",
+    "@types/lodash": "^4.14.192",
     "antd": "^5.4.0",
     "antd-mobile": "^5.29.0",
     "dotenv": "^16.0.3",
     "firebase": "^9.19.1",
+    "js-cookie": "^3.0.1",
     "json-loader": "^0.5.7",
     "mobx": "^6.9.0",
     "mobx-react": "^7.6.0",
     "node-libs-browser": "^2.2.1",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "typescript-cookie": "^1.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.21.4",

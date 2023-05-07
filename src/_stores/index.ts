@@ -1,3 +1,4 @@
 import UserStore from "./UserStore";
+import RoomStore from "./RoomStore";
 
-export { UserStore };
+export { UserStore, RoomStore };

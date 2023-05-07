@@ -3,6 +3,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+
+}
+
+.layout_sider{
+    z-index: 10;
 }
 
 @media (max-width : 480px){
