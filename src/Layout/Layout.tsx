@@ -87,9 +87,7 @@ const AppLayout = ({ children }: any) => {
     closeModal();
   };
 
-  useEffect(() => {
-    fetchRoom();
-  }, [isNewRoomModalVisible]);
+
 
   return (
     <Layout style={{ minHeight: "100vh" }}>

@@ -22,7 +22,7 @@ class UserStore {
   }
 
   public getUser(): any {
-    return JSON.parse(sessionStorage.getItem("user") ?? "");
+    return JSON.parse(sessionStorage.getItem("user") ?? "{}");
   }
 
   public setUser(user: any): void {

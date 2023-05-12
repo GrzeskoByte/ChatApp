@@ -14,6 +14,6 @@ interface MessagesInteface {
 type RoomType = Room[] | null | undefined;
 type RoomId = string | null;
 
-type Messages = MessagesInteface | string[] | null;
+type MessagesType = MessagesInteface[] | string[] | null;
 
-export { Room, MessagesInteface, RoomType, RoomId, Messages };
+export { Room, MessagesInteface, RoomType, RoomId, MessagesType };

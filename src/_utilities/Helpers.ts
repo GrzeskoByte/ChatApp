@@ -3,7 +3,7 @@ export function setCookie(name: string, val: string) {
   const value = val;
 
   // Set it expire in 7 days
-  date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+  date.setTime(date.getTime() + 1000 * 60 * 60);
 
   // Set it
   document.cookie =
@@ -27,3 +27,9 @@ export function deleteCookie(name: string) {
   // Set it
   document.cookie = name + "=; expires=" + date.toUTCString() + "; path=/";
 }
+
+export const getInitials = (name: string): string => {
+  if (!name || name.length === 0 || !name.includes(" ")) return "";
+  const splitedName = name.split(" ");
+  return `${splitedName[0].charAt(0)}${splitedName[1].charAt(0)}`;
+};

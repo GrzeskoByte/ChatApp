@@ -1,4 +1,4 @@
-import { firestore } from "./Firebase";
+import { firestore, auth } from "./Firebase";
 import {
   collection,
   doc,
@@ -8,10 +8,11 @@ import {
   query,
   where,
   getDocs,
+  addDoc,
 } from "firebase/firestore";
 
 import { filter, forEach, map } from "lodash";
-import { UserStore } from "../_stores";
+import { UserStore, RoomStore } from "../_stores";
 
 const DEFAULT_COLLECTION_NAME = "Chats";
 
@@ -81,5 +82,24 @@ export const joinToRoom = async (roomId: string) => {
     }
   } catch (err) {
     throw new Error("Unhandled error.");
+  }
+};
+
+export const sendMessage = async (message: string) => {
+  try {
+    const user = UserStore.getUser();
+    const messagesRef = collection(firestore, "messages");
+
+    const newMessage = {
+      body: message,
+      createdAt: new Date().getTime(),
+      createdBy: user.providerData[0].email,
+      roomId: RoomStore.getRoomId(),
+      userId: user.uid,
+    };
+
+    await addDoc(messagesRef, newMessage);
+  } catch (err) {
+    throw new Error("Unable to send message");
   }
 };

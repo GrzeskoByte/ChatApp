@@ -1,31 +1,36 @@
 import { makeAutoObservable } from "mobx";
 import {
-  getRoomsById,
   getMessagesFromRoom,
+  getRoomsById,
 } from "../_utilities/FirebaseHelpers";
 
+import { findIndex, map } from "lodash";
 import { getCookie, setCookie } from "../_utilities/Helpers";
-import { findIndex, isUndefined, map } from "lodash";
+
+import { firestore } from "../_utilities/Firebase";
+
+import { query, where, collection, onSnapshot } from "firebase/firestore";
 
 import { UserStore } from "./index";
 
-import { Room, MessagesInteface, RoomType, RoomId, Messages } from "./stores";
+import { MessagesType, Room, RoomId, RoomType } from "./stores";
 
 class RoomStore {
   private roomId: RoomId = null;
   private rooms: RoomType = null;
-  private isLoading: Boolean = true;
-  private messages: Messages = null;
+  private messages: MessagesType = [];
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  async loadData() {
+    if (UserStore.getUser()) {
+      this.fetchRoom();
+    }
 
     if (getCookie("roomId") !== "undefined") {
       this.roomId = getCookie("roomId") ?? null;
-    }
-
-    if (UserStore.getUser()) {
-      this.fetchRoom();
     }
   }
 
@@ -38,11 +43,7 @@ class RoomStore {
     return this?.rooms;
   }
 
-  getIsLoading(): Boolean {
-    return this.isLoading;
-  }
-
-  getMessages() {
+  getMessages(): MessagesType {
     return this.messages;
   }
 
@@ -57,6 +58,7 @@ class RoomStore {
         key: room.id,
         onClick: (e: any) => {
           this.setRoomId(e.key);
+          this.loadData();
         },
       };
     });
@@ -79,15 +81,40 @@ class RoomStore {
   }
 
   private async fetchMessagesByRoomId() {
+    const messagesRef = query(
+      collection(firestore, "messages"),
+      where("roomId", "==", this.getRoomId() ?? "")
+    );
+
+    onSnapshot(messagesRef, (snapshot: any) => {
+      snapshot.docChanges().forEach((change: any) => {
+        if (change.type === "added") {
+          const newMessage = change.doc.data();
+          this.addMessage(newMessage);
+          this.loadData();
+        }
+      });
+    });
+
     const messages = await getMessagesFromRoom(this.roomId);
-    this.messages = messages;
-    console.log(messages);
+    this.setMessages(messages);
   }
 
   //setters
-  setRoomId(roomId: string) {
+
+  setRoomId(roomId: string): void {
     setCookie("roomId", roomId);
     this.roomId = roomId;
+  }
+
+  setMessages(messages: MessagesType): void {
+    this.messages = messages;
+  }
+
+  //actions
+
+  addMessage(message: any): void {
+    this.messages?.push(message);
   }
 }
 
