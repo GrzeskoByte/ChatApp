@@ -61,10 +61,10 @@ export const getMessagesFromRoom: any = async (roomId: string) => {
 };
 
 export const joinToRoom = async (roomId: string) => {
+
   try {
     const roomRef = doc(firestore, COLLECTIONS.ROOMS, roomId);
     const roomSnapshot = await getDoc(roomRef);
-    console.log(roomSnapshot);
 
     if (
       roomSnapshot.exists() &&
@@ -75,12 +75,13 @@ export const joinToRoom = async (roomId: string) => {
         UserStore.getUser().uid,
         ...newRoomObject["members"],
       ];
-
+      console.log(newRoomObject);
       updateDoc(roomRef, newRoomObject);
     } else {
       throw new Error("Following room does not exist");
     }
   } catch (err) {
+    console.log(err);
     throw new Error("Unhandled error.");
   }
 };

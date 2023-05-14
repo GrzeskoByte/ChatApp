@@ -21,23 +21,21 @@ class RoomStore {
   private messages: MessagesType = [];
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {}, { autoBind: true });
   }
 
   async loadData() {
-    if (UserStore.getUser()) {
-      this.fetchRoom();
+    if (UserStore.getUser()?.uid) {
+      this.rooms = await getRoomsById(UserStore.getUser().uid);
+      this.fetchMessagesByRoomId();
     }
 
-    if (getCookie("roomId") !== "undefined") {
+    if (getCookie("roomId") !== undefined && this.roomId === null) {
       this.roomId = getCookie("roomId") ?? null;
     }
-  }
 
-  fetchRoom = async () => {
-    this.rooms = await getRoomsById(UserStore.getUser().uid);
-    this.fetchMessagesByRoomId();
-  };
+    this.messages = [];
+  }
 
   getRooms(): RoomType {
     return this?.rooms;
@@ -52,7 +50,7 @@ class RoomStore {
   }
 
   get getRoomsItems() {
-    return map(this?.rooms, (room) => {
+    return map(this.rooms, (room) => {
       return {
         label: room.name,
         key: room.id,
@@ -91,13 +89,9 @@ class RoomStore {
         if (change.type === "added") {
           const newMessage = change.doc.data();
           this.addMessage(newMessage);
-          this.loadData();
         }
       });
     });
-
-    const messages = await getMessagesFromRoom(this.roomId);
-    this.setMessages(messages);
   }
 
   //setters

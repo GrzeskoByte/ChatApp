@@ -14,7 +14,7 @@ const Layout = lazy(() => import("./Layout/Layout"));
 const LoginForm = lazy(() => import("./Components/LoginForm/LoginForm"));
 
 export const App: React.FC = observer(() => {
-  const { getRoomId, getRooms, currentRoomName, fetchRoom, loadData } =
+  const { getRoomId, getRooms, currentRoomName, loadData } =
     RoomStore;
 
   const [isUserSignedIn, setIsUserSignedIn] = useState<Boolean>(false);
@@ -30,8 +30,6 @@ export const App: React.FC = observer(() => {
 
     loadData();
 
-    if (isUserSignedIn) fetchRoom();
-
     return unsubscribe;
   }, [isUserSignedIn]);
 
@@ -39,13 +37,7 @@ export const App: React.FC = observer(() => {
     <Suspense fallback={<Spin />}>
       {isUserSignedIn ? (
         <Layout>
-          {!!!getRooms() ? (
-            <>
-              <Messages />
-            </>
-          ) : (
-            <Empty />
-          )}
+          <Messages />
         </Layout>
       ) : isLoading ? (
         <Spin></Spin>

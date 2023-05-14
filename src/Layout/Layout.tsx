@@ -13,6 +13,8 @@ import { joinToRoom } from "../_utilities/FirebaseHelpers";
 import { observer } from "mobx-react";
 import "./layout.css";
 
+import { map } from "lodash";
+
 interface RoomObject {
   members: string[];
   name: string;
@@ -24,7 +26,7 @@ const { Title } = Typography;
 type MenuItem = Required<MenuProps>["items"][number];
 
 const AppLayout = ({ children }: any) => {
-  const { getRoomId, getRoomsItems, currentRoomName, fetchRoom } = RoomStore;
+  const { getRoomId, currentRoomName, loadData, getRoomsItems } = RoomStore;
 
   const [collapsed, setCollapsed] = useState<boolean>(true);
   const [isNewRoomModalVisible, setIsNewRoomModalVisible] =
@@ -73,12 +75,14 @@ const AppLayout = ({ children }: any) => {
   const handleModalInputChange = ({ target: { value } }: any): void => {
     setModalInputValue(value);
   };
+
   const closeModal = () => {
     setIsNewRoomModalVisible(false);
   };
 
-  const handleOk = () => {
+  const handleOk = async () => {
     joinToRoom(String(modalInputValue));
+    await loadData();
     closeModal();
   };
 
@@ -86,8 +90,6 @@ const AppLayout = ({ children }: any) => {
     setIsNewRoomModalVisible(false);
     closeModal();
   };
-
-
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -101,30 +103,41 @@ const AppLayout = ({ children }: any) => {
         <Input onChange={handleModalInputChange} value={modalInputValue} />
       </Modal>
 
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        className="layout_sider"
+      <Header
+        className="layout_header"
+        style={{
+          padding: 0,
+          backgroundColor: "#001529",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
       >
-        <Menu theme="dark" mode="inline" items={items} />
-      </Sider>
-      <Layout className="site-layout">
-        <Header
-          style={{
-            padding: "5px 10px",
-            width: "100%",
-            backgroundColor: "transparent",
-          }}
-        >
-          <Title level={3} style={{ padding: "10px" }}>
-            {getRoomId() !== null && `Room Name: ${currentRoomName}`}
+        <div className="top_bar_container">
+          <Title level={3} style={{ color: "#fff", margin: 0 }}>
+            {getRoomId() !== null && `${currentRoomName}`}
           </Title>
-        </Header>
-        <Content style={{ margin: "0 16px" }} className="center">
-          {children}
+
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={["1"]}
+            style={{ lineHeight: "64px" }}
+            items={items}
+            className="main_menu"
+          />
+        </div>
+      </Header>
+
+      <Layout>
+        <Content style={{ margin: "24px 16px 0" }}>
+          <div
+            style={{ padding: 24, background: "#fff", minHeight: 360 }}
+            className="center"
+          >
+            {children}
+          </div>
         </Content>
-        {/* <Footer style={{ textAlign: "center" }}>ChatApp version :</Footer> */}
       </Layout>
     </Layout>
   );

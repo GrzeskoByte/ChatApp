@@ -2,64 +2,23 @@
    --message-width : 80vw; 
 }
 
-.messages_container{
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: start;
-    width: var(--message-width);
-    height: 100%;
-    padding: 15px 5px;
-    flex-wrap: wrap;
-}
-
 
 .message_item{
-    display: flex;
     background-color: #fff;
-    padding: 5px 25px;
-    margin: 10px 0 ;
     width: var(--message-width);
+    overflow: hidden;
 }
-
-.message_item:nth-of-type(even){
-
-   background-color: royalblue;
-}
-
-
-.message_item:nth-child(even){
-    flex-direction: row-reverse;
-}
-
-.message_container:nth-of-type(even){
-   border-bottom-left-radius: 10px;
-   border-top-left-radius: 10px;
-   border-bottom-right-radius: 10px;
-}
-
-.message_container:nth-of-type(odd){
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
- }
-
 
  .chat_container{
-    padding: 5px 15px;
+
     min-height: 90vh;
-    width: 80vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-   
+    padding-bottom: 5vh;
  }
 
  .message_input{
     position: fixed;
-    width: 70vw;
+    width: 90%;
     bottom: 2vh;
-    left: 22vw;
+    left: 5%;
     margin : 0 10px;
  }
